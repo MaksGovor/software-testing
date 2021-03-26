@@ -4,10 +4,10 @@ using System;
 namespace MaksGovor.FileWorker.Test
 {
     [TestClass]
-    public class UnitTest1
+    public class FileWorkerTest
     {
-        [TestMethod]
-        public void TestMethod1()
+        [TestInitialize]
+        public void TestConstructor()
         {
         }
     }
