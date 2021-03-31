@@ -1,0 +1,2 @@
+"Anything that can be written in JavaScript will be written in JavaScript."
+- (c) Jeff Atwood, one of the creators of Stack Overflow

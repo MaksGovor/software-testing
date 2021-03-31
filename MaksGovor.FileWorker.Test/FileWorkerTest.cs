@@ -10,6 +10,7 @@ namespace MaksGovor.FileWorker.Test
         [TestInitialize]
         public void TestConstructor()
         {
+
         }
     }
 }
