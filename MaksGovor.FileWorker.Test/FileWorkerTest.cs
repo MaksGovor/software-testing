@@ -397,7 +397,147 @@ namespace MaksGovor.FileWorker.Test
             }
         }
 
+        [TestMethod]
+        public void Test_TryCopy_Zero_Number_Attempts_ReturnsFalse()
+        {
+            try
+            {
+                const string pathFrom = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile.txt";
+                const string pathTo = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile(1).txt";
+                const int tries = 0;
+
+                bool received = BaseFileWorker.TryWrite(pathFrom, pathTo, tries);
+
+                Assert.IsFalse(received, "The file cannot be copied with 0 write attempts!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
         #endregion TryCopy
 
+        #region TryWrite
+
+        [TestMethod]
+        public void Test_TryWrite_TXT_File_Indecated_Attempts_ReturnsTrue()
+        {
+            try
+            {
+                const string pathOfNewFile = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\writedFile.txt";
+                const string text = "I want to eat a mars bar on Mars.";
+                const int tries = 3;
+
+                bool received = BaseFileWorker.TryWrite(text, pathOfNewFile, tries);
+
+                Assert.IsTrue(received, "(TryWrite) File TXT was not written with attempts - 3 or an error occurred while trying to write!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_TryWrite_TXT_File_NoIndecated_Attempts_ReturnsTrue()
+        {
+            try
+            {
+                const string pathOfNewFile = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\writedFile.txt";
+                const string text = "I want to eat a mars bar on Mars.";
+
+                bool received = BaseFileWorker.TryWrite(text, pathOfNewFile);
+
+                Assert.IsTrue(received, "(TryWrite) File TXT was not written or an error occurred while trying to write!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_TryWrite_JSON_File_NoIndecated_Attempts_ReturnsTrue()
+        {
+            try
+            {
+                const string pathOfNewFile = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\writedFile.json";
+                const string text = "{" +
+                    "\r\n  \"dream\": \"I want to eat a mars bar on Mars.\"" +
+                    "\r\n}";
+
+                bool received = BaseFileWorker.TryWrite(text, pathOfNewFile);
+
+                Assert.IsTrue(received, "(TryWrite) File JSON was not written or an error occurred while trying to write!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_TryWrite_Zero_Number_Attempts_ReturnsFalse()
+        {
+            try
+            {
+                const string pathOfNewFile = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\writedFile.json";
+                const string text = "I want to eat a mars bar on Mars.";
+                const int tries = 0;
+
+                bool received = BaseFileWorker.TryWrite(text, pathOfNewFile, tries);
+
+                Assert.IsFalse(received, "(TryWrite) The file cannot be written with 0 write attempts!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        #endregion TryWrite
+
+        #region Write
+
+        [TestMethod]
+        public void Test_Write_TXT_File()
+        {
+            try
+            {
+                const string pathOfNewFile = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\writedFile.txt";
+                const string text = "I want to eat a mars bar on Mars.";
+
+                bool received = BaseFileWorker.Write(text, pathOfNewFile);
+
+                Assert.IsTrue(received, "(Write) File TXT was not written or an error occurred while trying to write!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_Write_JSON_File()
+        {
+            try
+            {
+                const string pathOfNewFile = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\writedFile.json";
+                const string text = "{" +
+                    "\r\n  \"dream\": \"I want to eat a mars bar on Mars.\"" +
+                    "\r\n}";
+
+                bool received = BaseFileWorker.Write(text, pathOfNewFile);
+
+                Assert.IsTrue(received, "(Write) File JSON was not written or an error occurred while trying to write!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        #endregion Write
     }
 }
