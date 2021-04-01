@@ -316,5 +316,88 @@ namespace MaksGovor.FileWorker.Test
 
         #endregion MkDir
 
+        #region TryCopy
+
+        [TestMethod]
+        public void Test_TryCopy_TXT_Indecated_Attempts_NoRewrite_ReturnsTrue()
+        {
+            try
+            {
+                const string pathFrom = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile.txt";
+                const string pathTo = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile(1).txt";
+                const bool rewrite = false;
+                const int tries = 3;
+
+                bool received = BaseFileWorker.TryCopy(pathFrom, pathTo, rewrite, tries);
+
+                Assert.IsTrue(received, "Copying a TXT file without overwriting with 3 attempts was unsuccessful");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_TryCopy_JSON_Indecated_Attempts_NoRewrite_ReturnsTrue()
+        {
+            try
+            {
+                const string pathFrom = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile.json";
+                const string pathTo = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile(1).json";
+                const bool rewrite = false;
+                const int tries = 3;
+
+                bool received = BaseFileWorker.TryCopy(pathFrom, pathTo, rewrite, tries);
+
+                Assert.IsTrue(received, "Copying a JSON file without overwriting with 3 attempts was unsuccessful");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_TryCopy_JSONtoTXT_Indecated_Attempts_NoRewrite_ReturnsTrue()
+        {
+            try
+            {
+                const string pathFrom = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile.json";
+                const string pathTo = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile(json).txt";
+                const bool rewrite = false;
+                const int tries = 3;
+
+                bool received = BaseFileWorker.TryCopy(pathFrom, pathTo, rewrite, tries);
+
+                Assert.IsTrue(received, "Copying a JSON file to TXT file without overwriting with 3 attempts was  unsuccessful");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_TryCopy_TXT_NoIndecated_Attempts_Rewrite_ReturnsTrue()
+        {
+            try
+            {
+                const string pathFrom = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile.txt";
+                const string pathTo = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile(1).txt";
+                const bool rewrite = true;
+
+                bool received = BaseFileWorker.TryCopy(pathFrom, pathTo, rewrite);
+
+                Assert.IsTrue(received, "Copying a TXT file with overwriting without specifying attempts (1 attempt) was unsuccessful");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        #endregion TryCopy
+
     }
 }
