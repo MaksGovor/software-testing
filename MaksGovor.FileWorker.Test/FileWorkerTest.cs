@@ -276,5 +276,45 @@ namespace MaksGovor.FileWorker.Test
 
         #endregion ReadAll
 
+        #region MkDir
+
+        [TestMethod]
+        public void Test_MkDir_by_Directory_Name()
+        {
+            try
+            {
+                const string dirName = "scopicsDoc";
+                string received = BaseFileWorker.MkDir(dirName);
+
+                const string available = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\bin\\Debug\\scopicsDoc";
+                Assert.IsNotNull(received, "The directory was not created or an error occurred while creating it!");
+                Assert.AreEqual(received, available, "The path in which the directory was created does not match the expected path!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_MkDir_by_Directory_FullPath()
+        {
+            try
+            {
+                const string dirName = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\scopicsDoc";
+                string received = BaseFileWorker.MkDir(dirName);
+
+                const string available = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\scopicsDoc";
+                Assert.IsNotNull(received, "The directory was not created or an error occurred while creating it!");
+                Assert.AreEqual(received, available, "The path in which the directory was created does not match the expected path!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        #endregion MkDir
+
     }
 }
