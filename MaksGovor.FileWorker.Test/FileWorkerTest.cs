@@ -370,7 +370,7 @@ namespace MaksGovor.FileWorker.Test
                                          "\r\n</note>";
 
                 Assert.AreEqual(available, receivedByFullPath,
-                         "The read text by full path from XML file do not match the available result!");
+                     "The read text by full path from XML file do not match the available result!");
                 Assert.AreEqual(available, receivedByRelativePath,
                     "The read text by relative path from XML file do not match the available result!");
             }
@@ -472,7 +472,7 @@ namespace MaksGovor.FileWorker.Test
         #region TryCopy
 
         [TestMethod]
-        public void Test_TryCopy_TXT_Indecated_Attempts_NoRewrite_ReturnsTrue()
+        public void Test_TryCopy_TXT_Indecated_Attempts_NoRewrite_FullPath_ReturnsTrue()
         {
             try
             {
@@ -483,7 +483,8 @@ namespace MaksGovor.FileWorker.Test
 
                 bool received = BaseFileWorker.TryCopy(pathFrom, pathTo, rewrite, tries);
 
-                Assert.IsTrue(received, "Copying a TXT file without overwriting with 3 attempts was unsuccessful");
+                Assert.IsTrue(received, 
+                    "Copying a TXT file by full path without overwriting with 3 attempts was unsuccessful");
             }
             catch (Exception err)
             {
@@ -492,7 +493,7 @@ namespace MaksGovor.FileWorker.Test
         }
 
         [TestMethod]
-        public void Test_TryCopy_JSON_Indecated_Attempts_NoRewrite_ReturnsTrue()
+        public void Test_TryCopy_JSON_Indecated_Attempts_NoRewrite_FullPath_ReturnsTrue()
         {
             try
             {
@@ -503,7 +504,8 @@ namespace MaksGovor.FileWorker.Test
 
                 bool received = BaseFileWorker.TryCopy(pathFrom, pathTo, rewrite, tries);
 
-                Assert.IsTrue(received, "Copying a JSON file without overwriting with 3 attempts was unsuccessful");
+                Assert.IsTrue(received, 
+                    "Copying a JSON file by full path without overwriting with 3 attempts was unsuccessful");
             }
             catch (Exception err)
             {
@@ -512,7 +514,7 @@ namespace MaksGovor.FileWorker.Test
         }
 
         [TestMethod]
-        public void Test_TryCopy_JSONtoTXT_Indecated_Attempts_NoRewrite_ReturnsTrue()
+        public void Test_TryCopy_JSONtoTXT_Indecated_Attempts_NoRewrite_FullPath_ReturnsTrue()
         {
             try
             {
@@ -523,7 +525,8 @@ namespace MaksGovor.FileWorker.Test
 
                 bool received = BaseFileWorker.TryCopy(pathFrom, pathTo, rewrite, tries);
 
-                Assert.IsTrue(received, "Copying a JSON file to TXT file without overwriting with 3 attempts was  unsuccessful");
+                Assert.IsTrue(received, 
+                    "Copying a JSON file to TXT file by full path without overwriting with 3 attempts was  unsuccessful");
             }
             catch (Exception err)
             {
@@ -532,7 +535,7 @@ namespace MaksGovor.FileWorker.Test
         }
 
         [TestMethod]
-        public void Test_TryCopy_TXT_NoIndecated_Attempts_Rewrite_ReturnsTrue()
+        public void Test_TryCopy_TXT_NoIndecated_Attempts_Rewrite_FullPath_ReturnsTrue()
         {
             try
             {
@@ -542,7 +545,8 @@ namespace MaksGovor.FileWorker.Test
 
                 bool received = BaseFileWorker.TryCopy(pathFrom, pathTo, rewrite);
 
-                Assert.IsTrue(received, "Copying a TXT file with overwriting without specifying attempts (1 attempt) was unsuccessful");
+                Assert.IsTrue(received, 
+                    "Copying a TXT file by full path with overwriting without specifying attempts (1 attempt) was unsuccessful");
             }
             catch (Exception err)
             {
@@ -551,7 +555,7 @@ namespace MaksGovor.FileWorker.Test
         }
 
         [TestMethod]
-        public void Test_TryCopy_Zero_Number_Attempts_ReturnsFalse()
+        public void Test_TryCopy_Zero_Number_Attempts_FullPath_ReturnsFalse()
         {
             try
             {
@@ -561,7 +565,29 @@ namespace MaksGovor.FileWorker.Test
 
                 bool received = BaseFileWorker.TryWrite(pathFrom, pathTo, tries);
 
-                Assert.IsFalse(received, "The file cannot be copied with 0 write attempts!");
+                Assert.IsFalse(received, 
+                    "The file cannot be copied with 0 write attempts!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_TryCopy_TXT_Indecated_Attempts_NoRewrite_RelativePath_ReturnsTrue()
+        {
+            try
+            {
+                const string pathFrom = ".\\..\\..\\testfile.txt";
+                const string pathTo = ".\\..\\..\\testfile(1).txt";
+                const bool rewrite = false;
+                const int tries = 3;
+
+                bool received = BaseFileWorker.TryCopy(pathFrom, pathTo, rewrite, tries);
+
+                Assert.IsTrue(received,
+                    "Copying a TXT file by relative path  without overwriting with 3 attempts was unsuccessful");
             }
             catch (Exception err)
             {
@@ -574,7 +600,7 @@ namespace MaksGovor.FileWorker.Test
         #region TryWrite
 
         [TestMethod]
-        public void Test_TryWrite_TXT_File_Indecated_Attempts_ReturnsTrue()
+        public void Test_TryWrite_TXT_File_Indecated_Attempts_FullPath_ReturnsTrue()
         {
             try
             {
@@ -584,7 +610,8 @@ namespace MaksGovor.FileWorker.Test
 
                 bool received = BaseFileWorker.TryWrite(text, pathOfNewFile, tries);
 
-                Assert.IsTrue(received, "(TryWrite) File TXT was not written with attempts - 3 or an error occurred while trying to write!");
+                Assert.IsTrue(received, 
+                    "(TryWrite) File TXT by full path was not written with attempts - 3 or an error occurred while trying to write!");
             }
             catch (Exception err)
             {
@@ -593,7 +620,7 @@ namespace MaksGovor.FileWorker.Test
         }
 
         [TestMethod]
-        public void Test_TryWrite_TXT_File_NoIndecated_Attempts_ReturnsTrue()
+        public void Test_TryWrite_TXT_File_NoIndecated_Attempts_FullPath_ReturnsTrue()
         {
             try
             {
@@ -602,7 +629,8 @@ namespace MaksGovor.FileWorker.Test
 
                 bool received = BaseFileWorker.TryWrite(text, pathOfNewFile);
 
-                Assert.IsTrue(received, "(TryWrite) File TXT was not written or an error occurred while trying to write!");
+                Assert.IsTrue(received,
+                    "(TryWrite) File TXT by full path was not written or an error occurred while trying to write!");
             }
             catch (Exception err)
             {
@@ -611,7 +639,7 @@ namespace MaksGovor.FileWorker.Test
         }
 
         [TestMethod]
-        public void Test_TryWrite_JSON_File_NoIndecated_Attempts_ReturnsTrue()
+        public void Test_TryWrite_JSON_File_NoIndecated_Attempts_FullPath_ReturnsTrue()
         {
             try
             {
@@ -622,7 +650,8 @@ namespace MaksGovor.FileWorker.Test
 
                 bool received = BaseFileWorker.TryWrite(text, pathOfNewFile);
 
-                Assert.IsTrue(received, "(TryWrite) File JSON was not written or an error occurred while trying to write!");
+                Assert.IsTrue(received,
+                    "(TryWrite) File JSON by full path was not written or an error occurred while trying to write!");
             }
             catch (Exception err)
             {
@@ -631,17 +660,38 @@ namespace MaksGovor.FileWorker.Test
         }
 
         [TestMethod]
-        public void Test_TryWrite_Zero_Number_Attempts_ReturnsFalse()
+        public void Test_TryWrite_Zero_Number_Attempts_FullPath_ReturnsFalse()
         {
             try
             {
-                const string pathOfNewFile = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\writedFile.json";
+                const string pathOfNewFile = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\noWritedFile.json";
                 const string text = "I want to eat a mars bar on Mars.";
                 const int tries = 0;
 
                 bool received = BaseFileWorker.TryWrite(text, pathOfNewFile, tries);
 
-                Assert.IsFalse(received, "(TryWrite) The file cannot be written with 0 write attempts!");
+                Assert.IsFalse(received,
+                    "(TryWrite) The file cannot be written with 0 write attempts!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_TryWrite_TXT_File_Indecated_Attempts_RelativePath_ReturnsTrue()
+        {
+            try
+            {
+                const string pathOfNewFile = ".\\..\\..\\writedFile.txt";
+                const string text = "I want to eat a mars bar on Mars.";
+                const int tries = 3;
+
+                bool received = BaseFileWorker.TryWrite(text, pathOfNewFile, tries);
+
+                Assert.IsTrue(received,
+                    "(TryWrite) File TXT by full relative was not written with attempts - 3 or an error occurred while trying to write!");
             }
             catch (Exception err)
             {
@@ -654,7 +704,7 @@ namespace MaksGovor.FileWorker.Test
         #region Write
 
         [TestMethod]
-        public void Test_Write_TXT_File()
+        public void Test_Write_TXT_File_FullPath_ReturnsTrue()
         {
             try
             {
@@ -663,7 +713,8 @@ namespace MaksGovor.FileWorker.Test
 
                 bool received = BaseFileWorker.Write(text, pathOfNewFile);
 
-                Assert.IsTrue(received, "(Write) File TXT was not written or an error occurred while trying to write!");
+                Assert.IsTrue(received,
+                    "(Write) File TXT by full path was not written or an error occurred while trying to write!");
             }
             catch (Exception err)
             {
@@ -672,7 +723,7 @@ namespace MaksGovor.FileWorker.Test
         }
 
         [TestMethod]
-        public void Test_Write_JSON_File()
+        public void Test_Write_JSON_File_FullPath_ReturnsTrue()
         {
             try
             {
@@ -683,7 +734,27 @@ namespace MaksGovor.FileWorker.Test
 
                 bool received = BaseFileWorker.Write(text, pathOfNewFile);
 
-                Assert.IsTrue(received, "(Write) File JSON was not written or an error occurred while trying to write!");
+                Assert.IsTrue(received,
+                    "(Write) File JSON  by full path was not written or an error occurred while trying to write!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_Write_TXT_File_RelativePath_ReturnsTrue()
+        {
+            try
+            {
+                const string pathOfNewFile = ".\\..\\..\\writedFile.txt";
+                const string text = "I want to eat a mars bar on Mars.";
+
+                bool received = BaseFileWorker.Write(text, pathOfNewFile);
+
+                Assert.IsTrue(received, 
+                    "(Write) File TXT by relative path was not written or an error occurred while trying to write!");
             }
             catch (Exception err)
             {
