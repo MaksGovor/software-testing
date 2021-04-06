@@ -34,7 +34,7 @@ namespace MaksGovor.FileWorker.Test
                 string received = BaseFileWorker.GetFileName(pathAbs);
                 
                 const string available = "testfile.txt";
-                Assert.AreEqual(received, available, "The filename retrieved from GetFileName by full path" +
+                Assert.AreEqual(available, received, "The filename retrieved from GetFileName by full path " +
                     "do not match the available result!");
             }
             catch (Exception err)
@@ -52,7 +52,7 @@ namespace MaksGovor.FileWorker.Test
                 string received = BaseFileWorker.GetFileName(pathRel);
 
                 const string available = "testfile.txt";
-                Assert.AreEqual(received, available, "The filename retrieved from GetFileName by relative path" +
+                Assert.AreEqual(available, received, "The filename retrieved from GetFileName by relative path " +
                     "do not match the available result!");
             }
             catch (Exception err)
@@ -69,7 +69,7 @@ namespace MaksGovor.FileWorker.Test
                 const string pathAbs = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\NoExist.txt";
                 string received = BaseFileWorker.GetFileName(pathAbs);
 
-                Assert.IsNull(received, "The filename retrieved from GetFileName by full path" +
+                Assert.IsNull(received, "The filename retrieved from GetFileName by full path " +
                     "must be NULL on a path that does not exist!");
             }
             catch (Exception err)
@@ -86,7 +86,7 @@ namespace MaksGovor.FileWorker.Test
                 const string pathRel = ".\\..\\..\\NoExist.txt";
                 string received = BaseFileWorker.GetFileName(pathRel);
 
-                Assert.IsNull(received, "The filename retrieved from GetFileName by relative path" +
+                Assert.IsNull(received, "The filename retrieved from GetFileName by relative path " +
                     "must be NULL on a path that does not exist!");
             }
             catch (Exception err)
@@ -100,14 +100,14 @@ namespace MaksGovor.FileWorker.Test
         #region GetFullPath 
 
         [TestMethod]
-        public void Test_GetFullPath_Existing_Way()
+        public void Test_GetFullPath_Existing_FullPath()
         {
             try
             {
                 const string pathAbs = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile.txt";
                 string received = BaseFileWorker.GetFullPath(pathAbs);
 
-                Assert.AreEqual(received, pathAbs, "The full path retrieved from GetFullPath " +
+                Assert.AreEqual(pathAbs, received, "The full path retrieved from GetFullPath by full path " +
                     "must be NULL on a path that does not exist!");
             }
             catch (Exception err)
@@ -117,14 +117,49 @@ namespace MaksGovor.FileWorker.Test
         }
 
         [TestMethod]
-        public void Test_GetFullPath_NoExisting_Way()
+        public void Test_GetFullPath_Existing_RelativePath()
+        {
+            try
+            {
+                const string pathAbs = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile.txt";
+                const string pathRel = ".\\..\\..\\testfile.txt";
+                string received = BaseFileWorker.GetFullPath(pathRel);
+
+                Assert.AreEqual(pathAbs, received, "The full path retrieved from GetFullPath by relative path " +
+                    "must be NULL on a path that does not exist!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_GetFullPath_NoExisting_FullPath()
         {
             try
             {
                 const string pathAbs = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\NoExist.txt";
                 string received = BaseFileWorker.GetFullPath(pathAbs);
 
-                Assert.IsNull(received, "The filename retrieved from GetFileName " +
+                Assert.IsNull(received, "The filename retrieved from GetFileName by full path " +
+                    "must be NULL on a path that does not exist!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_GetFullPath_NoExisting_RelativePath()
+        {
+            try
+            {
+                const string pathRel = ".\\..\\..\\NoExist.txt";
+                string received = BaseFileWorker.GetFullPath(pathRel);
+
+                Assert.IsNull(received, "The filename retrieved from GetFileName by relative path " +
                     "must be NULL on a path that does not exist!");
             }
             catch (Exception err)
@@ -138,7 +173,7 @@ namespace MaksGovor.FileWorker.Test
         #region GetPath
 
         [TestMethod]
-        public void Test_GetPath_Existing_Way()
+        public void Test_GetPath_Existing_FullPath()
         {
             try
             {
@@ -147,7 +182,7 @@ namespace MaksGovor.FileWorker.Test
 
                 const string available = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test";
 
-                Assert.AreEqual(received, available, "The path retrieved from GetPath " +
+                Assert.AreEqual(available, received, "The path retrieved from GetPath by full path " +
                     "do not match the available result!");
             }
             catch (Exception err)
@@ -157,14 +192,50 @@ namespace MaksGovor.FileWorker.Test
         }
 
         [TestMethod]
-        public void Test_GetPath_NoExisting_Way()
+        public void Test_GetPath_Existing_RelativePath()
+        {
+            try
+            {
+                const string pathRel = ".\\..\\..\\testfile.txt";
+                string received = BaseFileWorker.GetPath(pathRel);
+
+                const string available = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test";
+
+                Assert.AreEqual(available, received, "The path retrieved from GetPath by relative path " +
+                    "do not match the available result!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_GetPath_NoExisting_FullPath()
         {
             try
             {
                 const string pathAbs = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\NoExist.txt";
                 string received = BaseFileWorker.GetPath(pathAbs);
 
-                Assert.IsNull(received, "The filename retrieved from GetFileName " +
+                Assert.IsNull(received, "The filename retrieved from GetFileName by full path " +
+                    "must be NULL on a path that does not exist!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_GetPath_NoExisting_RelativePath()
+        {
+            try
+            {
+                const string pathRel = ".\\..\\..\\NoExist.txt";
+                string received = BaseFileWorker.GetPath(pathRel);
+
+                Assert.IsNull(received, "The filename retrieved from GetFileName by relative path " +
                     "must be NULL on a path that does not exist!");
             }
             catch (Exception err)
@@ -185,15 +256,19 @@ namespace MaksGovor.FileWorker.Test
             try
             {
                 const string pathAbs = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile.txt";
-                string received = BaseFileWorker.ReadLines(pathAbs)[index];
+                const string pathRel = ".\\..\\..\\testfile.txt";
+                string receivedByFullPath = BaseFileWorker.ReadLines(pathAbs)[index];
+                string receivedByRelativePath = BaseFileWorker.ReadLines(pathRel)[index];
 
-                Assert.AreEqual(received, available, "The read lines do not match the available result!");
+                Assert.AreEqual(available, receivedByFullPath,
+                    "The read lines by full path from TXT file do not match the available result!");
+                Assert.AreEqual(available, receivedByRelativePath,
+                    "The read lines by relative path from TXT file do not match the available result!");
             } catch (Exception err)
             {
                 Assert.Fail(err.Message);
             }
         }
-
 
         [DataTestMethod]
         [DataRow("<note>", 0)]
@@ -207,9 +282,14 @@ namespace MaksGovor.FileWorker.Test
             try
             {
                 const string pathAbs = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile.xml";
-                string received = BaseFileWorker.ReadLines(pathAbs)[index];
+                const string pathRel = ".\\..\\..\\testfile.xml";
+                string receivedByFullPath = BaseFileWorker.ReadLines(pathAbs)[index];
+                string receivedByRelativePath = BaseFileWorker.ReadLines(pathRel)[index];
 
-                Assert.AreEqual(received, available, "The read lines from XML file do not match the available result!");
+                Assert.AreEqual(available, receivedByFullPath,
+                   "The read lines by full path from XML file do not match the available result!");
+                Assert.AreEqual(available, receivedByRelativePath,
+                    "The read lines by relative path from XML file do not match the available result!");
             }
             catch (Exception err)
             {
@@ -230,9 +310,14 @@ namespace MaksGovor.FileWorker.Test
             try
             {
                 const string pathAbs = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile.json";
-                string received = BaseFileWorker.ReadLines(pathAbs)[index];
+                const string pathRel = ".\\..\\..\\testfile.json";
+                string receivedByFullPath = BaseFileWorker.ReadLines(pathAbs)[index];
+                string receivedByRelativePath = BaseFileWorker.ReadLines(pathRel)[index];
 
-                Assert.AreEqual(received, available, "The read lines from JSON file do not match the available result!");
+                Assert.AreEqual(available, receivedByFullPath,
+                    "The read lines by full path from JSON file do not match the available result!");
+                Assert.AreEqual(available, receivedByRelativePath,
+                    "The read lines by relative path from JSON file do not match the available result!");
             }
             catch (Exception err)
             {
@@ -249,12 +334,17 @@ namespace MaksGovor.FileWorker.Test
             try
             {
                 const string pathAbs = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile.txt";
-                string received = BaseFileWorker.ReadAll(pathAbs);
+                const string pathRel = ".\\..\\..\\testfile.txt";
+                string receivedByFullPath = BaseFileWorker.ReadAll(pathAbs);
+                string receivedByRelativePath = BaseFileWorker.ReadAll(pathRel);
 
                 const string available = "\"Anything that can be written in JavaScript will be written in JavaScript.\"" +
                     "\r\n- (c) Jeff Atwood, one of the creators of Stack Overflow";
 
-                Assert.AreEqual(received, available, "The read text from TXT file do not match the available result!");
+                Assert.AreEqual(available, receivedByFullPath,
+                    "The read text by full path from TXT file do not match the available result!");
+                Assert.AreEqual(available, receivedByRelativePath,
+                    "The read text by relative path from TXT file do not match the available result!");
             }
             catch (Exception err)
             {
@@ -268,7 +358,10 @@ namespace MaksGovor.FileWorker.Test
             try
             {
                 const string pathAbs = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile.xml";
-                string received = BaseFileWorker.ReadAll(pathAbs);
+                const string pathRel = ".\\..\\..\\testfile.xml";
+                string receivedByFullPath = BaseFileWorker.ReadAll(pathAbs);
+                string receivedByRelativePath = BaseFileWorker.ReadAll(pathRel);
+                
                 const string available = "<note>" +
                                          "\r\n<to>Tove</to>" +
                                          "\r\n<from>Jani</from>" +
@@ -276,7 +369,10 @@ namespace MaksGovor.FileWorker.Test
                                          "\r\n<body>Don't forget me this weekend!</body>" +
                                          "\r\n</note>";
 
-                Assert.AreEqual(received, available, "The read text from XML file do not match the available result!");
+                Assert.AreEqual(available, receivedByFullPath,
+                         "The read text by full path from XML file do not match the available result!");
+                Assert.AreEqual(available, receivedByRelativePath,
+                    "The read text by relative path from XML file do not match the available result!");
             }
             catch (Exception err)
             {
@@ -290,7 +386,9 @@ namespace MaksGovor.FileWorker.Test
             try
             {
                 const string pathAbs = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile.json";
-                string received = BaseFileWorker.ReadAll(pathAbs);
+                const string pathRel = ".\\..\\..\\testfile.json";
+                string receivedByFullPath = BaseFileWorker.ReadAll(pathAbs);
+                string receivedByRelativePath = BaseFileWorker.ReadAll(pathRel);
 
                 const string available = "{" +
                                         "\r\n  \"server\": {" +
@@ -300,7 +398,10 @@ namespace MaksGovor.FileWorker.Test
                                         "\r\n  }" +
                                         "\r\n}";
 
-                Assert.AreEqual(received, available, "The read text from JSON file do not match the available result!");
+                Assert.AreEqual(available, receivedByFullPath,
+                    "The read text by full path from JSON file do not match the available result!");
+                Assert.AreEqual(available, receivedByRelativePath,
+                    "The read text by relative path from JSON file do not match the available result!");
             }
             catch (Exception err)
             {
@@ -335,8 +436,26 @@ namespace MaksGovor.FileWorker.Test
         {
             try
             {
-                const string dirName = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\scopicsDoc";
-                string received = BaseFileWorker.MkDir(dirName);
+                const string dirFullPath = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\scopicsDoc";
+                string received = BaseFileWorker.MkDir(dirFullPath);
+
+                const string available = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\scopicsDoc";
+                Assert.IsNotNull(received, "The directory was not created or an error occurred while creating it!");
+                Assert.AreEqual(received, available, "The path in which the directory was created does not match the expected path!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_MkDir_by_Directory_RelativePath()
+        {
+            try
+            {
+                const string dirRelativePath = ".\\..\\..\\scopicsDoc";
+                string received = BaseFileWorker.MkDir(dirRelativePath);
 
                 const string available = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\scopicsDoc";
                 Assert.IsNotNull(received, "The directory was not created or an error occurred while creating it!");
