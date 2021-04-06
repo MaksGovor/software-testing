@@ -26,7 +26,7 @@ namespace MaksGovor.FileWorker.Test
         #region GetFileName
 
         [TestMethod]
-        public void Test_GetFileName_Existing_Way()
+        public void Test_GetFileName_Existing_FullPath()
         {
             try
             {
@@ -34,7 +34,7 @@ namespace MaksGovor.FileWorker.Test
                 string received = BaseFileWorker.GetFileName(pathAbs);
                 
                 const string available = "testfile.txt";
-                Assert.AreEqual(received, available, "The filename retrieved from GetFileName " +
+                Assert.AreEqual(received, available, "The filename retrieved from GetFileName by full path" +
                     "do not match the available result!");
             }
             catch (Exception err)
@@ -44,14 +44,32 @@ namespace MaksGovor.FileWorker.Test
         }
 
         [TestMethod]
-        public void Test_GetFileName_NoExisting_Way()
+        public void Test_GetFileName_Existing_RelativePath()
+        {
+            try
+            {
+                const string pathRel = ".\\..\\..\\testfile.txt";
+                string received = BaseFileWorker.GetFileName(pathRel);
+
+                const string available = "testfile.txt";
+                Assert.AreEqual(received, available, "The filename retrieved from GetFileName by relative path" +
+                    "do not match the available result!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_GetFileName_NoExisting_FullPath()
         {
             try
             {
                 const string pathAbs = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\NoExist.txt";
                 string received = BaseFileWorker.GetFileName(pathAbs);
 
-                Assert.IsNull(received, "The filename retrieved from GetFileName " +
+                Assert.IsNull(received, "The filename retrieved from GetFileName by full path" +
                     "must be NULL on a path that does not exist!");
             }
             catch (Exception err)
@@ -60,6 +78,22 @@ namespace MaksGovor.FileWorker.Test
             }
         }
 
+        [TestMethod]
+        public void Test_GetFileName_NoExisting_RelativePath()
+        {
+            try
+            {
+                const string pathRel = ".\\..\\..\\NoExist.txt";
+                string received = BaseFileWorker.GetFileName(pathRel);
+
+                Assert.IsNull(received, "The filename retrieved from GetFileName by relative path" +
+                    "must be NULL on a path that does not exist!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
 
         #endregion GetFileName
 
