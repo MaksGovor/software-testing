@@ -615,7 +615,7 @@ namespace MaksGovor.FileWorker.Test
             try
             {
                 const string pathFrom = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile.txt";
-                const string pathTo = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile(1).txt";
+                const string pathTo = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile(2).txt";
                 const bool rewrite = true;
 
                 bool received = BaseFileWorker.TryCopy(pathFrom, pathTo, rewrite);
