@@ -423,7 +423,7 @@ namespace MaksGovor.FileWorker.Test
 
                 const string available = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\bin\\Debug\\scopicsDoc";
                 Assert.IsNotNull(received, "The directory was not created or an error occurred while creating it!");
-                Assert.AreEqual(received, available, "The path in which the directory was created does not match the expected path!");
+                Assert.AreEqual(available, received, "The path in which the directory was created does not match the expected path!");
             }
             catch (Exception err)
             {
@@ -441,7 +441,7 @@ namespace MaksGovor.FileWorker.Test
 
                 const string available = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\scopicsDoc";
                 Assert.IsNotNull(received, "The directory was not created or an error occurred while creating it!");
-                Assert.AreEqual(received, available, "The path in which the directory was created does not match the expected path!");
+                Assert.AreEqual(available, received, "The path in which the directory was created does not match the expected path!");
             }
             catch (Exception err)
             {
@@ -459,7 +459,82 @@ namespace MaksGovor.FileWorker.Test
 
                 const string available = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\scopicsDoc";
                 Assert.IsNotNull(received, "The directory was not created or an error occurred while creating it!");
-                Assert.AreEqual(received, available, "The path in which the directory was created does not match the expected path!");
+                Assert.AreEqual(available, received, "The path in which the directory was created does not match the expected path!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_MkDir_by_Directory_Name_Nested_DIrectories()
+        {
+            try
+            {
+                const string dirName = "SomeImportantDirectory\\scopicsDoc";
+                string received = BaseFileWorker.MkDir(dirName);
+
+                const string available = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\bin\\Debug\\scopicsDoc";
+
+                Assert.IsNotNull(received, "The nested directories was not created or an error occurred while creating it!");
+                Assert.AreEqual(available, received, "The path in which the directory was created does not match the expected path!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_MkDir_by_Directory_Path_Nested_DIrectories()
+        {
+            try
+            {
+                const string dirFullPath = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\SomeImportantDirectory\\scopicsDoc";
+                string received = BaseFileWorker.MkDir(dirFullPath);
+
+                const string available = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\SomeImportantDirectory\\scopicsDoc";
+
+                Assert.IsNotNull(received, "The nested directories was not created or an error occurred while creating it!");
+                Assert.AreEqual(available, received, "The path in which the directory was created does not match the expected path!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_MkDir_by_Directory_RelativePath_Nested_DIrectories()
+        {
+            try
+            {
+                const string dirRelativePath = ".\\..\\..\\SomeImportantDirectory\\scopicsDoc";
+                string received = BaseFileWorker.MkDir(dirRelativePath);
+
+                const string available = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\SomeImportantDirectory\\scopicsDoc";
+                Assert.IsNotNull(received, "The nested directories was not created or an error occurred while creating it!");
+                Assert.AreEqual(available, received, "The path in which the directory was created does not match the expected path!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_MkDir_by_Directory_Path_Already_Existing_Directory()
+        {
+            try
+            {
+                const string dirFullPath = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\ExistDirectory";
+                string received = BaseFileWorker.MkDir(dirFullPath);
+
+                const string available = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\ExistDirectory";
+
+                Assert.IsNotNull(received, "The directory was not created or an error occurred while creating it!");
+                Assert.AreEqual(available, received, "The path in which the directory was created does not match the expected path!");
             }
             catch (Exception err)
             {
