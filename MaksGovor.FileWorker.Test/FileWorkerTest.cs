@@ -475,7 +475,7 @@ namespace MaksGovor.FileWorker.Test
                 const string dirName = "SomeImportantDirectory\\scopicsDoc";
                 string received = BaseFileWorker.MkDir(dirName);
 
-                const string available = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\bin\\Debug\\scopicsDoc";
+                const string available = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\bin\\Debug\\SomeImportantDirectory\\scopicsDoc";
 
                 Assert.IsNotNull(received, "The nested directories was not created or an error occurred while creating it!");
                 Assert.AreEqual(available, received, "The path in which the directory was created does not match the expected path!");
@@ -629,16 +629,18 @@ namespace MaksGovor.FileWorker.Test
             }
         }
 
-        [TestMethod]
-        public void Test_TryCopy_Zero_Number_Attempts_FullPath_ReturnsFalse()
+        [DataTestMethod]
+        [DataRow(-1)]
+        [DataRow(0)]
+        public void Test_TryCopy_NonValid_Number_Attempts_FullPath_ReturnsFalse(int tries)
         {
             try
             {
                 const string pathFrom = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile.txt";
                 const string pathTo = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\testfile(1).txt";
-                const int tries = 0;
+                const bool rewrite = true;
 
-                bool received = BaseFileWorker.TryWrite(pathFrom, pathTo, tries);
+                bool received = BaseFileWorker.TryCopy(pathFrom, pathTo, rewrite, tries);
 
                 Assert.IsFalse(received, 
                     "The file cannot be copied with 0 write attempts!");
@@ -655,7 +657,7 @@ namespace MaksGovor.FileWorker.Test
             try
             {
                 const string pathFrom = ".\\..\\..\\testfile.txt";
-                const string pathTo = ".\\..\\..\\testfile(1).txt";
+                const string pathTo = ".\\..\\..\\testfile(r1).txt";
                 const bool rewrite = false;
                 const int tries = 3;
 
@@ -734,14 +736,15 @@ namespace MaksGovor.FileWorker.Test
             }
         }
 
-        [TestMethod]
-        public void Test_TryWrite_Zero_Number_Attempts_FullPath_ReturnsFalse()
+        [DataTestMethod]
+        [DataRow(-1)]
+        [DataRow(0)]
+        public void Test_TryWrite_Zero_Number_Attempts_FullPath_ReturnsFalse(int tries)
         {
             try
             {
                 const string pathOfNewFile = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\noWritedFile.json";
                 const string text = "I want to eat a mars bar on Mars.";
-                const int tries = 0;
 
                 bool received = BaseFileWorker.TryWrite(text, pathOfNewFile, tries);
 
@@ -759,7 +762,7 @@ namespace MaksGovor.FileWorker.Test
         {
             try
             {
-                const string pathOfNewFile = ".\\..\\..\\writedFile.txt";
+                const string pathOfNewFile = ".\\..\\..\\writedFile(r).txt";
                 const string text = "I want to eat a mars bar on Mars.";
                 const int tries = 3;
 
@@ -823,7 +826,7 @@ namespace MaksGovor.FileWorker.Test
         {
             try
             {
-                const string pathOfNewFile = ".\\..\\..\\writedFile.txt";
+                const string pathOfNewFile = ".\\..\\..\\writedFile(r).txt";
                 const string text = "I want to eat a mars bar on Mars.";
 
                 bool received = BaseFileWorker.Write(text, pathOfNewFile);
