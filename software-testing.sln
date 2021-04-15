@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaksGovor.FileWorker.Test",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaksGovor.PasswordHashingUtils.Test", "MaksGovor.PasswordHashingUtils.Test\MaksGovor.PasswordHashingUtils.Test.csproj", "{53D1C272-5CA0-44CA-A7FF-CF01193A3762}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IIG.PasswordHashingUtils", "IIG.PasswordHashingUtils\IIG.PasswordHashingUtils.csproj", "{685E8988-1197-431C-BB7F-5C37AA062360}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{53D1C272-5CA0-44CA-A7FF-CF01193A3762}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53D1C272-5CA0-44CA-A7FF-CF01193A3762}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53D1C272-5CA0-44CA-A7FF-CF01193A3762}.Release|Any CPU.Build.0 = Release|Any CPU
+		{685E8988-1197-431C-BB7F-5C37AA062360}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{685E8988-1197-431C-BB7F-5C37AA062360}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{685E8988-1197-431C-BB7F-5C37AA062360}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{685E8988-1197-431C-BB7F-5C37AA062360}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
