@@ -324,6 +324,39 @@ namespace MaksGovor.FileWorker.Test
                 Assert.Fail(err.Message);
             }
         }
+
+        [TestMethod]
+        public void Test_ReadLines_by_Null_FilePath()
+        {
+            try
+            {
+                const string pathNull = null;
+                string[] receivedByNullPath = BaseFileWorker.ReadLines(pathNull);
+
+                Assert.IsNull(receivedByNullPath, "The readLines does not return null when a null path is specified!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_ReadLines_by_Empty_FilePath()
+        {
+            try
+            {
+                const string pathNull = "";
+                string[] receivedByNullPath = BaseFileWorker.ReadLines(pathNull);
+
+                Assert.IsNull(receivedByNullPath, "The readLines does not return null when a empty string path is specified!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
         #endregion ReadLines
 
         #region ReadAll
@@ -402,6 +435,38 @@ namespace MaksGovor.FileWorker.Test
                     "The read text by full path from JSON file do not match the available result!");
                 Assert.AreEqual(available, receivedByRelativePath,
                     "The read text by relative path from JSON file do not match the available result!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_ReadAll_by_Null_FilePath()
+        {
+            try
+            {
+                const string pathNull = null;
+                string receivedByNullPath = BaseFileWorker.ReadAll(pathNull);
+
+                Assert.IsNull(receivedByNullPath, "The readAll not return null when a null path is specified!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_ReadAll_by_Empty_FilePath()
+        {
+            try
+            {
+                const string pathNull = "";
+                string receivedByNullPath = BaseFileWorker.ReadAll(pathNull);
+
+                Assert.IsNull(receivedByNullPath, "The readAll does not return null when a empty string path is specified!");
             }
             catch (Exception err)
             {
@@ -672,6 +737,54 @@ namespace MaksGovor.FileWorker.Test
             }
         }
 
+        [TestMethod]
+        public void Test_TryCopy_NoRewrite_NullPath_ReturnsFalse()
+        {
+            try
+            {
+                const string pathNull = null;
+                const string pathFrom = ".\\..\\..\\testfile.txt";
+                const string pathTo = ".\\..\\..\\testfile(r1).txt";
+                const bool rewrite = false;
+
+                bool received1 = BaseFileWorker.TryCopy(pathNull, pathTo, rewrite);
+                bool received2 = BaseFileWorker.TryCopy(pathFrom, pathNull, rewrite);
+
+                Assert.IsFalse(received1,
+                    "The file cannot be copied using a null source path!");
+                Assert.IsFalse(received2,
+                    "The file cannot be copied to a destination path of null!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_TryCopy_NoRewrite_EmptyPath_ReturnsFalse()
+        {
+            try
+            {
+                const string pathEmpty = "";
+                const string pathFrom = ".\\..\\..\\testfile.txt";
+                const string pathTo = ".\\..\\..\\testfile(r1).txt";
+                const bool rewrite = false;
+
+                bool received1 = BaseFileWorker.TryCopy(pathEmpty, pathTo, rewrite);
+                bool received2 = BaseFileWorker.TryCopy(pathFrom, pathEmpty, rewrite);
+
+                Assert.IsFalse(received1,
+                    "The file cannot be copied using a empty source path!");
+                Assert.IsFalse(received2,
+                    "The file cannot be copied to a destination path of empty!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
         #endregion TryCopy
 
         #region TryWrite
@@ -777,6 +890,44 @@ namespace MaksGovor.FileWorker.Test
             }
         }
 
+        [TestMethod]
+        public void Test_TryWrite_NullPath_ReturnsFalse()
+        {
+            try
+            {
+                const string pathOfNewFile = null;
+                const string text = "I want to eat a mars bar on Mars.";
+
+                bool received = BaseFileWorker.TryWrite(text, pathOfNewFile);
+
+                Assert.IsFalse(received,
+                    "(TryWrite) Text cannot be written on a path of null path!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_TryWrite_EmptyPath_ReturnsFalse()
+        {
+            try
+            {
+                const string pathOfNewFile = "";
+                const string text = "I want to eat a mars bar on Mars.";
+
+                bool received = BaseFileWorker.TryWrite(text, pathOfNewFile);
+
+                Assert.IsFalse(received,
+                    "(TryWrite) Text cannot be written on a path of empty path!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
         #endregion TryWrite
 
         #region Write
@@ -833,6 +984,44 @@ namespace MaksGovor.FileWorker.Test
 
                 Assert.IsTrue(received, 
                     "(Write) File TXT by relative path was not written or an error occurred while trying to write!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_Write_NullPath_ReturnsFalse()
+        {
+            try
+            {
+                const string pathOfNewFile = null;
+                const string text = "I want to eat a mars bar on Mars.";
+
+                bool received = BaseFileWorker.Write(text, pathOfNewFile);
+
+                Assert.IsFalse(received,
+                    "(Write) Text cannot be written on a path of null path!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_Write_EmptyPath_ReturnsFalse()
+        {
+            try
+            {
+                const string pathOfNewFile = "";
+                const string text = "I want to eat a mars bar on Mars.";
+
+                bool received = BaseFileWorker.Write(text, pathOfNewFile);
+
+                Assert.IsFalse(received,
+                    "(Write) Text cannot be written on a path of empty path!");
             }
             catch (Exception err)
             {
