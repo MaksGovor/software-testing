@@ -95,6 +95,40 @@ namespace MaksGovor.FileWorker.Test
             }
         }
 
+        [TestMethod]
+        public void Test_GetFileName_NullPath()
+        {
+            try
+            {
+                const string pathNull = null;
+                string received = BaseFileWorker.GetFileName(pathNull);
+
+                Assert.IsNull(received, "The filename retrieved from GetFileName by null path " +
+                    "must be NULL!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_GetFileName_EmptyPath()
+        {
+            try
+            {
+                const string pathEmpty = null;
+                string received = BaseFileWorker.GetFileName(pathEmpty);
+
+                Assert.IsNull(received, "The filename retrieved from GetFileName by empty path " +
+                    "must be NULL!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
         #endregion GetFileName
 
         #region GetFullPath 
@@ -142,7 +176,7 @@ namespace MaksGovor.FileWorker.Test
                 const string pathAbs = "D:\\GitHub\\software-testing\\MaksGovor.FileWorker.Test\\NoExist.txt";
                 string received = BaseFileWorker.GetFullPath(pathAbs);
 
-                Assert.IsNull(received, "The filename retrieved from GetFileName by full path " +
+                Assert.IsNull(received, "The full path retrieved from GetFullPath by full path " +
                     "must be NULL on a path that does not exist!");
             }
             catch (Exception err)
@@ -159,8 +193,42 @@ namespace MaksGovor.FileWorker.Test
                 const string pathRel = ".\\..\\..\\NoExist.txt";
                 string received = BaseFileWorker.GetFullPath(pathRel);
 
-                Assert.IsNull(received, "The filename retrieved from GetFileName by relative path " +
+                Assert.IsNull(received, "The full path retrieved from GetFullPath by relative path " +
                     "must be NULL on a path that does not exist!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_GetFullPath_NullPath()
+        {
+            try
+            {
+                const string pathNull = null;
+                string received = BaseFileWorker.GetFullPath(pathNull);
+
+                Assert.IsNull(received, "The full path retrieved from GetFullPath by null path " +
+                    "must be NULL");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_GetFullPath_EmptyPath()
+        {
+            try
+            {
+                const string pathEmpty = "";
+                string received = BaseFileWorker.GetFullPath(pathEmpty);
+
+                Assert.IsNull(received, "The full path retrieved from GetFullPath by empty path " +
+                    "must be NULL");
             }
             catch (Exception err)
             {
@@ -237,6 +305,40 @@ namespace MaksGovor.FileWorker.Test
 
                 Assert.IsNull(received, "The filename retrieved from GetFileName by relative path " +
                     "must be NULL on a path that does not exist!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_GetPath_NullPath()
+        {
+            try
+            {
+                const string pathNull = null;
+                string received = BaseFileWorker.GetPath(pathNull);
+
+                Assert.IsNull(received, "The filename retrieved from GetFileName by null path " +
+                    "must be NULL!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_GetPath_EmptyPath()
+        {
+            try
+            {
+                const string pathEmpty = "";
+                string received = BaseFileWorker.GetPath(pathEmpty);
+
+                Assert.IsNull(received, "The filename retrieved from GetFileName by empty path " +
+                    "must be NULL!");
             }
             catch (Exception err)
             {
@@ -600,6 +702,38 @@ namespace MaksGovor.FileWorker.Test
 
                 Assert.IsNotNull(received, "The directory was not created or an error occurred while creating it!");
                 Assert.AreEqual(available, received, "The path in which the directory was created does not match the expected path!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_MkDir_by_Directory_NullPath()
+        {
+            try
+            {
+                const string dirNullPath = null;
+                string received = BaseFileWorker.MkDir(dirNullPath);
+
+                Assert.IsNull(received, "Unable to create a directory with a null path!");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_MkDir_by_Directory_EmptyPath()
+        {
+            try
+            {
+                const string dirEmptyPath = null;
+                string received = BaseFileWorker.MkDir(dirEmptyPath);
+
+                Assert.IsNull(received, "Unable to create a directory with a empty path!");
             }
             catch (Exception err)
             {
