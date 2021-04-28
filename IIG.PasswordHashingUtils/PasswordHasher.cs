@@ -18,7 +18,7 @@ namespace IIG.PasswordHashingUtils
         /// <summary>
         ///     First Level Salt
         /// </summary>
-        private static string _salt = "put your soul(or salt) here";
+        private static string _salt = "mysalathere";
 
         /// <summary>
         ///     Init PasswordHasher Parameters
