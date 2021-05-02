@@ -21,7 +21,7 @@ namespace MaksGovor.PasswordHashingUtils.Test
         {
             _passwordHasher = new PasswordHasher();
             _password = "camry3.5";
-            _defautlSalt = "mysalathere";
+            _defautlSalt = "put your soul(or salt) here";
             _defautlModAdler32 = 65521;
             _typePH = typeof(PasswordHasher);
             _saltInfo = _typePH.GetField("_salt", BindingFlags.Static | BindingFlags.NonPublic);
