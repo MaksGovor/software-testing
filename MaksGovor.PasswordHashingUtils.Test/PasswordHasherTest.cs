@@ -1,21 +1,34 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using IIG.PasswordHashingUtils;
 using System;
+using System.Reflection;
 
 namespace MaksGovor.PasswordHashingUtils.Test
 {
     [TestClass]
     public class PasswordHasherTest
     {
-        private static string _password;
-        private static string _defautlSalt;
+        private string _password;
+        private PasswordHasher _passwordHasher;
+        private string _defautlSalt;
+        private uint _defautlModAdler32;
+        private Type _typePH;
+        private FieldInfo _saltInfo;
+        private FieldInfo _modAdler32Info;
 
         [TestInitialize]
         public void Initialization()
         {
+            _passwordHasher = new PasswordHasher();
             _password = "camry3.5";
-            _defautlSalt = "mysalatherewegoagain";
+            _defautlSalt = "mysalathere";
+            _defautlModAdler32 = 65521;
+            _typePH = typeof(PasswordHasher);
+            _saltInfo = _typePH.GetField("_salt", BindingFlags.Static | BindingFlags.NonPublic);
+            _modAdler32Info = _typePH.GetField("_modAdler32", BindingFlags.Static | BindingFlags.NonPublic);
         }
+
+        #region Test Init
 
         [DataTestMethod]
         [DataRow("", (uint)0, "salt is empty string and adlerMod32 = 0")]
@@ -24,11 +37,21 @@ namespace MaksGovor.PasswordHashingUtils.Test
         {
             try
             {
+                // Set the default values to test the method 
+                _saltInfo.SetValue(_passwordHasher, _defautlSalt);
+                _modAdler32Info.SetValue(_passwordHasher, _defautlModAdler32);
+
                 PasswordHasher.Init(salt, adlerMod32);
+
+                string saltValue = _saltInfo.GetValue(_passwordHasher).ToString();
+                string adlerMod32Value = _modAdler32Info.GetValue(_passwordHasher).ToString();
+
+                Assert.AreEqual(_defautlSalt, saltValue, "Unexpected result of _salt on the way 0_1_4_5 when" + fact);
+                Assert.AreEqual(_defautlModAdler32.ToString(), adlerMod32Value, "Unexpected result of _modAdler32 on the way 0_1_4_5 when" + fact);
             }
-            catch (Exception)
+            catch (Exception err)
             {
-                Assert.Fail("Unexpected result on the way 0_1_4_5 when" + fact);
+                Assert.Fail(err.Message);
             }
         }
 
@@ -39,11 +62,21 @@ namespace MaksGovor.PasswordHashingUtils.Test
         {
             try
             {
+                // Set the default values to test the method afterwards
+                _saltInfo.SetValue(_passwordHasher, _defautlSalt);
+                _modAdler32Info.SetValue(_passwordHasher, _defautlModAdler32);
+
                 PasswordHasher.Init(salt, adlerMod32);
+
+                string saltValue = _saltInfo.GetValue(_passwordHasher).ToString();
+                string adlerMod32Value = _modAdler32Info.GetValue(_passwordHasher).ToString();
+
+                Assert.AreEqual(_defautlSalt, saltValue, "Unexpected result of _salt on the way 0_1_3_5 when" + fact);
+                Assert.AreEqual(adlerMod32.ToString(), adlerMod32Value, "Unexpected result of _modAdler32 on the way 0_1_3_5 when" + fact);
             }
-            catch (Exception)
+            catch (Exception err)
             {
-                Assert.Fail("Unexpected result on the way 0_1_3_5 when" + fact);
+                Assert.Fail(err.Message);
             }
         }
 
@@ -54,11 +87,21 @@ namespace MaksGovor.PasswordHashingUtils.Test
         {
             try
             {
+                // Set the default values to test the method afterwards
+                _saltInfo.SetValue(_passwordHasher, _defautlSalt);
+                _modAdler32Info.SetValue(_passwordHasher, _defautlModAdler32);
+
                 PasswordHasher.Init(salt, adlerMod32);
+
+                string saltValue = _saltInfo.GetValue(_passwordHasher).ToString();
+                string adlerMod32Value = _modAdler32Info.GetValue(_passwordHasher).ToString();
+
+                Assert.AreEqual(salt, saltValue, "Unexpected result of _salt on the way 0_2_4_5 when" + fact);
+                Assert.AreEqual(_defautlModAdler32.ToString(), adlerMod32Value, "Unexpected result of _modAdler32 on the way 0_2_4_5 when" + fact);
             }
-            catch (Exception)
-            {
-                Assert.Fail("Unexpected result on the way 0_1_3_5 when" + fact);
+            catch (Exception err) 
+            { 
+                Assert.Fail(err.Message); 
             }
         }
 
@@ -69,12 +112,24 @@ namespace MaksGovor.PasswordHashingUtils.Test
         {
             try
             {
+                // Set the default values to test the method afterwards
+                _saltInfo.SetValue(_passwordHasher, _defautlSalt);
+                _modAdler32Info.SetValue(_passwordHasher, _defautlModAdler32);
+
                 PasswordHasher.Init(salt, adlerMod32);
+
+                string saltValue = _saltInfo.GetValue(_passwordHasher).ToString();
+                string adlerMod32Value = _modAdler32Info.GetValue(_passwordHasher).ToString();
+
+                Assert.AreEqual(salt, saltValue, "Unexpected result of _salt on the way 0_2_3_5 when" + fact);
+                Assert.AreEqual(adlerMod32.ToString(), adlerMod32Value, "Unexpected result of _modAdler32 on the way 0_2_3_5 when" + fact);
             }
-            catch (Exception)
+            catch (Exception err)
             {
-                Assert.Fail("Unexpected result on the way 0_1_3_5 when" + fact);
+                Assert.Fail(err.Message);
             }
         }
+
+        #endregion Test Init
     }
 }
