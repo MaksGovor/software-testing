@@ -33,7 +33,7 @@ namespace MaksGovor.PasswordHashingUtils.Test
         [DataTestMethod]
         [DataRow("", (uint)0, "salt is empty string and adlerMod32 = 0")]
         [DataRow(null, (uint)0, "salt = null and adlerMod32 = 0")]
-        public void Test_Init_0_1_4_5(string salt, uint adlerMod32, string fact)
+        public void Test_Init_Route_0_1_5_7(string salt, uint adlerMod32, string fact)
         {
             try
             {
@@ -46,8 +46,8 @@ namespace MaksGovor.PasswordHashingUtils.Test
                 string saltValue = _saltInfo.GetValue(_passwordHasher).ToString();
                 string adlerMod32Value = _modAdler32Info.GetValue(_passwordHasher).ToString();
 
-                Assert.AreEqual(_defautlSalt, saltValue, "Unexpected result of _salt on the way 0_1_4_5 when" + fact);
-                Assert.AreEqual(_defautlModAdler32.ToString(), adlerMod32Value, "Unexpected result of _modAdler32 on the way 0_1_4_5 when" + fact);
+                Assert.AreEqual(_defautlSalt, saltValue, "Unexpected result of _salt on the way 0_1_5_7 when" + fact);
+                Assert.AreEqual(_defautlModAdler32.ToString(), adlerMod32Value, "Unexpected result of _modAdler32 on the way 0_1_5_7 when" + fact);
             }
             catch (Exception err)
             {
@@ -58,7 +58,7 @@ namespace MaksGovor.PasswordHashingUtils.Test
         [DataTestMethod]
         [DataRow("", (uint)1, "salt is empty string and adlerMod32 = 1")]
         [DataRow(null, uint.MaxValue, "salt = null and adlerMod32 = maxValue (4,294,967,295)")]
-        public void Test_Init_0_1_3_5(string salt, uint adlerMod32, string fact)
+        public void Test_Init_Route_0_1_6_7(string salt, uint adlerMod32, string fact)
         {
             try
             {
@@ -71,8 +71,8 @@ namespace MaksGovor.PasswordHashingUtils.Test
                 string saltValue = _saltInfo.GetValue(_passwordHasher).ToString();
                 string adlerMod32Value = _modAdler32Info.GetValue(_passwordHasher).ToString();
 
-                Assert.AreEqual(_defautlSalt, saltValue, "Unexpected result of _salt on the way 0_1_3_5 when" + fact);
-                Assert.AreEqual(adlerMod32.ToString(), adlerMod32Value, "Unexpected result of _modAdler32 on the way 0_1_3_5 when" + fact);
+                Assert.AreEqual(_defautlSalt, saltValue, "Unexpected result of _salt on the way 0_1_6_7 when" + fact);
+                Assert.AreEqual(adlerMod32.ToString(), adlerMod32Value, "Unexpected result of _modAdler32 on the way 0_1_6_7 when" + fact);
             }
             catch (Exception err)
             {
@@ -83,7 +83,7 @@ namespace MaksGovor.PasswordHashingUtils.Test
         [DataTestMethod]
         [DataRow("notdefaultsalt", (uint)0, "salt is valid string and adlerMod32 = 0")]
         [DataRow("notdefaultsalt", uint.MinValue, "salt is valid string and adlerMod32 = minValue (0)")]
-        public void Test_Init_0_2_4_5(string salt, uint adlerMod32, string fact)
+        public void Test_Init_Route_0_2_4_5_7(string salt, uint adlerMod32, string fact)
         {
             try
             {
@@ -96,8 +96,8 @@ namespace MaksGovor.PasswordHashingUtils.Test
                 string saltValue = _saltInfo.GetValue(_passwordHasher).ToString();
                 string adlerMod32Value = _modAdler32Info.GetValue(_passwordHasher).ToString();
 
-                Assert.AreEqual(salt, saltValue, "Unexpected result of _salt on the way 0_2_4_5 when" + fact);
-                Assert.AreEqual(_defautlModAdler32.ToString(), adlerMod32Value, "Unexpected result of _modAdler32 on the way 0_2_4_5 when" + fact);
+                Assert.AreEqual(salt, saltValue, "Unexpected result of _salt on the way 0_2_4_5_7 when" + fact);
+                Assert.AreEqual(_defautlModAdler32.ToString(), adlerMod32Value, "Unexpected result of _modAdler32 on the way 0_2_4_5_7 when" + fact);
             }
             catch (Exception err) 
             { 
@@ -108,7 +108,7 @@ namespace MaksGovor.PasswordHashingUtils.Test
         [DataTestMethod]
         [DataRow("notdefaultsalt", (uint)1, "salt is valid string and adlerMod32 = 1")]
         [DataRow("notdefaultsalt", uint.MaxValue, "salt is valid string and adlerMod32 = maxValue (4,294,967,295)")]
-        public void Test_Init_0_2_3_5(string salt, uint adlerMod32, string fact)
+        public void Test_Init_Route_0_2_4_6_7(string salt, uint adlerMod32, string fact)
         {
             try
             {
@@ -121,8 +121,23 @@ namespace MaksGovor.PasswordHashingUtils.Test
                 string saltValue = _saltInfo.GetValue(_passwordHasher).ToString();
                 string adlerMod32Value = _modAdler32Info.GetValue(_passwordHasher).ToString();
 
-                Assert.AreEqual(salt, saltValue, "Unexpected result of _salt on the way 0_2_3_5 when" + fact);
-                Assert.AreEqual(adlerMod32.ToString(), adlerMod32Value, "Unexpected result of _modAdler32 on the way 0_2_3_5 when" + fact);
+                Assert.AreEqual(salt, saltValue, "Unexpected result of _salt on the way 0_2_4_6_7 when" + fact);
+                Assert.AreEqual(adlerMod32.ToString(), adlerMod32Value, "Unexpected result of _modAdler32 on the way 0_2_4_6_7 when" + fact);
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_Init()
+        {
+            try
+            {
+
+                Assert.ThrowsException<OverflowException>(() => PasswordHasher.Init("", 0));
+
             }
             catch (Exception err)
             {
