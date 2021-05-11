@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaksGovor.PasswordHashingUt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IIG.PasswordHashingUtils", "IIG.PasswordHashingUtils\IIG.PasswordHashingUtils.csproj", "{685E8988-1197-431C-BB7F-5C37AA062360}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaksGovor.DatabaseInteraction.Test", "MaksGovor.DatabaseInteraction.Test\MaksGovor.DatabaseInteraction.Test.csproj", "{B8E1301A-A011-4BC0-A189-04B0954C402C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{685E8988-1197-431C-BB7F-5C37AA062360}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{685E8988-1197-431C-BB7F-5C37AA062360}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{685E8988-1197-431C-BB7F-5C37AA062360}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8E1301A-A011-4BC0-A189-04B0954C402C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8E1301A-A011-4BC0-A189-04B0954C402C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8E1301A-A011-4BC0-A189-04B0954C402C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8E1301A-A011-4BC0-A189-04B0954C402C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
