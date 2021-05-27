@@ -13,8 +13,8 @@ namespace MaksGovor.DatabaseInteraction.Test
         private const string Server = @"DESKTOP-NILDRFH";
         private const string Database = @"IIG.CoSWE.AuthDB";
         private const bool IsTrusted = false;
-        private const string Login = @"coswe";
-        private const string Password = @"L}EjpfCgru9X@GLj";
+        private const string Login = @"sa";
+        private const string Password = @"26052002";
         private const int ConnectionTimeout = 75;
 
         [TestMethod]
@@ -25,6 +25,7 @@ namespace MaksGovor.DatabaseInteraction.Test
                 AuthDatabaseUtils authDatabase = new AuthDatabaseUtils(
                     Server, Database, IsTrusted, Login, Password, ConnectionTimeout
                     );
+                authDatabase.AddCredentials("eee2y", "ieeerrrrieeerrrrieeerrrrieeerrrrieeerrrrieeerrrrieeerrrrieeerrrrieeerrrr");
             } catch (Exception err)
             {
                 Assert.Fail(err.Message);
