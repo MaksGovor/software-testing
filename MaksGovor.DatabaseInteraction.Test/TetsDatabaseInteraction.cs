@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text;
-using System.Linq;
+using System.Data;
 using IIG.CoSFE.DatabaseUtils;
 using IIG.PasswordHashingUtils;
 using IIG.FileWorker;
@@ -124,9 +124,9 @@ namespace MaksGovor.DatabaseInteraction.Test
             try
             {
                 const string login = "postgres";
-                const string password = "postgres";
+                const string password = "postgresPASSWORD";
                 const string newlogin = "mssql";
-                const string newpassword = "mssql";
+                const string newpassword = "mssqlPASSWORD";
                 string hash = PasswordHasher.GetHash(password);
                 string newhash = PasswordHasher.GetHash(newpassword);
                 
@@ -184,7 +184,7 @@ namespace MaksGovor.DatabaseInteraction.Test
         }
 
         [TestMethod]
-        public void TestWrire_ReadAll_Push_in_DB()
+        public void Test_ReadAll_Push_in_DB()
         {
             try
             {
@@ -207,7 +207,7 @@ namespace MaksGovor.DatabaseInteraction.Test
         }
 
         [TestMethod]
-        public void TestWrire_ReadLines_Push_in_DB()
+        public void Test_ReadLines_Push_in_DB()
         {
             try
             {
@@ -222,6 +222,51 @@ namespace MaksGovor.DatabaseInteraction.Test
                 string textFromDB = Encoding.ASCII.GetString(fileContentFromDB);
                 Assert.AreEqual(filename, filenameFromDB);
                 Assert.AreEqual(textFromFile, textFromDB);
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_ReadAll_and_Deleting_from_DB()
+        {
+            try
+            {
+                string textFromFile = BaseFileWorker.ReadAll(filename);
+                byte[] fileContent = Encoding.ASCII.GetBytes(textFromFile);
+                string filenameFromDB = null;
+                byte[] fileContentFromDB = null;
+
+                Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
+                int? fileID = storageDatabase.GetIntBySql("SELECT MAX(FileID) FROM Files");
+                Assert.IsTrue(storageDatabase.DeleteFile((int)fileID));
+
+                Assert.IsFalse(storageDatabase.GetFile((int)fileID, out filenameFromDB, out fileContentFromDB));
+                Assert.IsNull(filenameFromDB);
+                Assert.IsNull(fileContentFromDB);
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Test_ReadAll_GetFiles_from_DB()
+        {
+            try
+            {
+                string textFromFile = BaseFileWorker.ReadAll(filename);
+                byte[] fileContent = Encoding.ASCII.GetBytes(textFromFile);
+                
+                Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
+                Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
+                Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
+
+                DataTable files = storageDatabase.GetFiles(filename);
+                Assert.IsNotNull(files);
             }
             catch (Exception err)
             {
