@@ -113,4 +113,24 @@ namespace MaksGovor.DatabaseInteraction.Test
             authDatabase.ExecSql("DELETE FROM Credentials");
         }
     }
+
+    [TestClass]
+    public class TetsDatabaseInteractionStorage
+    {
+        private const string Server = @"DESKTOP-NILDRFH";
+        private const string Database = @"IIG.CoSWE.StorageDB";
+        private const bool IsTrusted = false;
+        private const string Login = @"sa";
+        private const string Password = @"26052002";
+        private const int ConnectionTimeout = 75;
+        private StorageDatabaseUtils storageDatabase;
+
+        [TestInitialize]
+        public void Initialization()
+        {
+            storageDatabase = new StorageDatabaseUtils(
+                Server, Database, IsTrusted, Login, Password, ConnectionTimeout
+            );
+        }
+    }
 }
