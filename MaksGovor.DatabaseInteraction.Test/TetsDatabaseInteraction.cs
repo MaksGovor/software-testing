@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text;
-using System.Data;
 using IIG.CoSFE.DatabaseUtils;
 using IIG.PasswordHashingUtils;
 using IIG.FileWorker;
@@ -254,7 +253,7 @@ namespace MaksGovor.DatabaseInteraction.Test
         }
 
         [TestMethod]
-        public void Test_ReadAll_GetFiles_from_DB()
+        public void Test_ReadAll_GetFiles_from_DB_NotNull()
         {
             try
             {
@@ -264,9 +263,7 @@ namespace MaksGovor.DatabaseInteraction.Test
                 Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
                 Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
                 Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
-
-                DataTable files = storageDatabase.GetFiles(filename);
-                Assert.IsNotNull(files);
+                Assert.IsNotNull(storageDatabase.GetFiles(filename));
             }
             catch (Exception err)
             {
