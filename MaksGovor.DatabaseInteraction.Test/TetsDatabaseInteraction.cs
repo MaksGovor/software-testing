@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using IIG.DatabaseConnectionUtils;
+using System.Text;
+using System.Linq;
 using IIG.CoSFE.DatabaseUtils;
 using IIG.PasswordHashingUtils;
 using IIG.FileWorker;
@@ -35,7 +36,7 @@ namespace MaksGovor.DatabaseInteraction.Test
         [DataRow("\r\\6", "qwerty1", ",*₴!:`'@/*+_?}{][|", uint.MaxValue)]
         [DataRow("u e 7", "", "a b c", (uint)4)]
         [DataRow("user8", "\r\n\\\"")]
-        public void TestGetHash_Push_to_DB(string login, string password, string salt = null, uint? adlerMod = null)
+        public void TestGetHash_Push_to_DB_ValidFields(string login, string password, string salt = null, uint? adlerMod = null)
         {
             try
             {
@@ -48,6 +49,26 @@ namespace MaksGovor.DatabaseInteraction.Test
                     "There must be a user on the system with " +
                     $"login: {login}, password: ${password}");
             } catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [DataTestMethod]
+        [DataRow("", "абвгд")]
+        [DataRow(null, "passwd")]
+        public void TestGetHash_Push_to_DB_InvalidFields(string login, string password, string salt = null, uint? adlerMod = null)
+        {
+            try
+            {
+                string hash = PasswordHasher.GetHash(password, salt, adlerMod);
+                Assert.IsFalse(authDatabase.AddCredentials(login, hash),
+                    $"The value should not be added with login: {login}");
+
+                Assert.IsFalse(authDatabase.CheckCredentials(login, hash),
+                    $"It is not possible to find the entry where the login: {login}");
+            }
+            catch (Exception err)
             {
                 Assert.Fail(err.Message);
             }
@@ -131,6 +152,32 @@ namespace MaksGovor.DatabaseInteraction.Test
             storageDatabase = new StorageDatabaseUtils(
                 Server, Database, IsTrusted, Login, Password, ConnectionTimeout
             );
+        }
+
+        [TestMethod]
+        public void TestWrire_ReadAll_Push_in_DB()
+        {
+            try
+            {
+                const string filename = "file1.txt";
+                const string text = "some text\n\rsome text";
+                Assert.IsTrue(BaseFileWorker.Write(text, filename));
+                string textFromFile = BaseFileWorker.ReadAll(filename);
+                byte[] fileContent = Encoding.ASCII.GetBytes(textFromFile);
+                string filenameFromDB;
+                byte[] fileContentFromDB;
+
+                //Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
+                Assert.IsTrue(storageDatabase.GetFile(9, out filenameFromDB, out fileContentFromDB));
+                string textFromDB = Encoding.ASCII.GetString(fileContentFromDB);
+
+                Assert.AreEqual(filename, filenameFromDB);
+                Assert.AreEqual(textFromFile, textFromDB);
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
         }
     }
 }
