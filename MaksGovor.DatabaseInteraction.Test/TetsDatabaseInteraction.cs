@@ -57,11 +57,12 @@ namespace MaksGovor.DatabaseInteraction.Test
         [DataTestMethod]
         [DataRow("", "абвгд")]
         [DataRow(null, "passwd")]
-        public void TestGetHash_Push_to_DB_InvalidFields(string login, string password, string salt = null, uint? adlerMod = null)
+        [DataRow("goodusername", null)]
+        public void TestGetHash_Push_to_DB_InvalidFields(string login, string password)
         {
             try
             {
-                string hash = PasswordHasher.GetHash(password, salt, adlerMod);
+                string hash = PasswordHasher.GetHash(password);
                 Assert.IsFalse(authDatabase.AddCredentials(login, hash),
                     $"The value should not be added with login: {login}");
 
@@ -99,6 +100,24 @@ namespace MaksGovor.DatabaseInteraction.Test
             }
         }
 
+        [TestMethod]
+        public void Test_Push_Equal_Data()
+        {
+            try
+            {
+                const string login = "dadadadada";
+                const string password = "minus3";
+                string hash = PasswordHasher.GetHash(password);
+
+                Assert.IsTrue(authDatabase.AddCredentials(login, hash), "The value is not added to the database");
+                Assert.IsFalse(authDatabase.AddCredentials(login, hash), "It is not possible to add an existing user");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+        
         [TestMethod]
         public void TestGetHash_Update_in_DB()
         {
@@ -145,6 +164,7 @@ namespace MaksGovor.DatabaseInteraction.Test
         private const string Password = @"26052002";
         private const int ConnectionTimeout = 75;
         private StorageDatabaseUtils storageDatabase;
+        private const string filename = "filetest.txt";
 
         [TestInitialize]
         public void Initialization()
@@ -152,6 +172,15 @@ namespace MaksGovor.DatabaseInteraction.Test
             storageDatabase = new StorageDatabaseUtils(
                 Server, Database, IsTrusted, Login, Password, ConnectionTimeout
             );
+            try
+            {
+                const string text = "some text\n\rsome text";
+                BaseFileWorker.Write(text, filename);
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
         }
 
         [TestMethod]
@@ -159,18 +188,15 @@ namespace MaksGovor.DatabaseInteraction.Test
         {
             try
             {
-                const string filename = "file1.txt";
-                const string text = "some text\n\rsome text";
-                Assert.IsTrue(BaseFileWorker.Write(text, filename));
                 string textFromFile = BaseFileWorker.ReadAll(filename);
                 byte[] fileContent = Encoding.ASCII.GetBytes(textFromFile);
                 string filenameFromDB;
                 byte[] fileContentFromDB;
 
-                //Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
-                Assert.IsTrue(storageDatabase.GetFile(9, out filenameFromDB, out fileContentFromDB));
+                Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
+                int? fileID = storageDatabase.GetIntBySql("SELECT MAX(FileID) FROM Files");
+                Assert.IsTrue(storageDatabase.GetFile((int)fileID, out filenameFromDB, out fileContentFromDB));
                 string textFromDB = Encoding.ASCII.GetString(fileContentFromDB);
-
                 Assert.AreEqual(filename, filenameFromDB);
                 Assert.AreEqual(textFromFile, textFromDB);
             }
@@ -178,6 +204,35 @@ namespace MaksGovor.DatabaseInteraction.Test
             {
                 Assert.Fail(err.Message);
             }
+        }
+
+        [TestMethod]
+        public void TestWrire_ReadLines_Push_in_DB()
+        {
+            try
+            {
+                string textFromFile = string.Join("", BaseFileWorker.ReadLines(filename));
+                byte[] fileContent = Encoding.ASCII.GetBytes(textFromFile);
+                string filenameFromDB;
+                byte[] fileContentFromDB;
+
+                Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
+                int? fileID = storageDatabase.GetIntBySql("SELECT MAX(FileID) FROM Files");
+                Assert.IsTrue(storageDatabase.GetFile((int)fileID, out filenameFromDB, out fileContentFromDB));
+                string textFromDB = Encoding.ASCII.GetString(fileContentFromDB);
+                Assert.AreEqual(filename, filenameFromDB);
+                Assert.AreEqual(textFromFile, textFromDB);
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            storageDatabase.ExecSql("DELETE FROM Files");
         }
     }
 }
