@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Data;
 using System.Text;
 using IIG.CoSFE.DatabaseUtils;
 using IIG.PasswordHashingUtils;
@@ -163,7 +164,11 @@ namespace MaksGovor.DatabaseInteraction.Test
         private const string Password = @"26052002";
         private const int ConnectionTimeout = 75;
         private StorageDatabaseUtils storageDatabase;
-        private const string filename = "filetest.txt";
+        private const string filenameTxt = "filetest.txt";
+        private const string filenameEmpty = "filetest_empty.txt";
+        private const string filenameNull = "filetest_null.txt";
+        private const string filenameJson = "filetest.json";
+        private const string filenameXml = "filetest.xml";
 
         [TestInitialize]
         public void Initialization()
@@ -173,8 +178,14 @@ namespace MaksGovor.DatabaseInteraction.Test
             );
             try
             {
-                const string text = "some text\n\rsome text";
-                BaseFileWorker.Write(text, filename);
+                const string txt = "some text\n\rsome text";
+                const string json = "{ \"field\": \"value\" }";
+                const string xml = "<xsl:strip-space elements=\" * \"/>";
+                BaseFileWorker.Write(txt, filenameTxt);
+                BaseFileWorker.Write("", filenameEmpty);
+                BaseFileWorker.Write(null, filenameNull);
+                BaseFileWorker.Write(json, filenameJson);
+                BaseFileWorker.Write(xml, filenameXml);
             }
             catch (Exception err)
             {
@@ -182,21 +193,26 @@ namespace MaksGovor.DatabaseInteraction.Test
             }
         }
 
-        [TestMethod]
-        public void Test_ReadAll_Push_in_DB()
+        [DataTestMethod]
+        [DataRow(filenameTxt)]
+        [DataRow(filenameJson)]
+        [DataRow(filenameXml)]
+        [DataRow(filenameEmpty)]
+        [DataRow(filenameNull)]
+        public void Test_ReadAll_Push_in_DB(string filename)
         {
             try
             {
                 string textFromFile = BaseFileWorker.ReadAll(filename);
                 byte[] fileContent = Encoding.ASCII.GetBytes(textFromFile);
-                string filenameFromDB;
+                string filenameTxtFromDB;
                 byte[] fileContentFromDB;
 
                 Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
                 int? fileID = storageDatabase.GetIntBySql("SELECT MAX(FileID) FROM Files");
-                Assert.IsTrue(storageDatabase.GetFile((int)fileID, out filenameFromDB, out fileContentFromDB));
+                Assert.IsTrue(storageDatabase.GetFile((int)fileID, out filenameTxtFromDB, out fileContentFromDB));
                 string textFromDB = Encoding.ASCII.GetString(fileContentFromDB);
-                Assert.AreEqual(filename, filenameFromDB);
+                Assert.AreEqual(filename, filenameTxtFromDB);
                 Assert.AreEqual(textFromFile, textFromDB);
             }
             catch (Exception err)
@@ -205,21 +221,26 @@ namespace MaksGovor.DatabaseInteraction.Test
             }
         }
 
-        [TestMethod]
-        public void Test_ReadLines_Push_in_DB()
+        [DataTestMethod]
+        [DataRow(filenameTxt)]
+        [DataRow(filenameJson)]
+        [DataRow(filenameXml)]
+        [DataRow(filenameEmpty)]
+        [DataRow(filenameNull)]
+        public void Test_ReadLines_Push_in_DB(string filename)
         {
             try
             {
                 string textFromFile = string.Join("", BaseFileWorker.ReadLines(filename));
                 byte[] fileContent = Encoding.ASCII.GetBytes(textFromFile);
-                string filenameFromDB;
+                string filenameTxtFromDB;
                 byte[] fileContentFromDB;
 
                 Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
                 int? fileID = storageDatabase.GetIntBySql("SELECT MAX(FileID) FROM Files");
-                Assert.IsTrue(storageDatabase.GetFile((int)fileID, out filenameFromDB, out fileContentFromDB));
+                Assert.IsTrue(storageDatabase.GetFile((int)fileID, out filenameTxtFromDB, out fileContentFromDB));
                 string textFromDB = Encoding.ASCII.GetString(fileContentFromDB);
-                Assert.AreEqual(filename, filenameFromDB);
+                Assert.AreEqual(filename, filenameTxtFromDB);
                 Assert.AreEqual(textFromFile, textFromDB);
             }
             catch (Exception err)
@@ -228,22 +249,25 @@ namespace MaksGovor.DatabaseInteraction.Test
             }
         }
 
-        [TestMethod]
-        public void Test_ReadAll_and_Deleting_from_DB()
+        [DataTestMethod]
+        [DataRow(filenameTxt)]
+        [DataRow(filenameEmpty)]
+        [DataRow(filenameNull)]
+        public void Test_ReadAll_and_Deleting_from_DB(string filename)
         {
             try
             {
                 string textFromFile = BaseFileWorker.ReadAll(filename);
                 byte[] fileContent = Encoding.ASCII.GetBytes(textFromFile);
-                string filenameFromDB = null;
+                string filenameTxtFromDB = null;
                 byte[] fileContentFromDB = null;
 
                 Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
                 int? fileID = storageDatabase.GetIntBySql("SELECT MAX(FileID) FROM Files");
                 Assert.IsTrue(storageDatabase.DeleteFile((int)fileID));
 
-                Assert.IsFalse(storageDatabase.GetFile((int)fileID, out filenameFromDB, out fileContentFromDB));
-                Assert.IsNull(filenameFromDB);
+                Assert.IsFalse(storageDatabase.GetFile((int)fileID, out filenameTxtFromDB, out fileContentFromDB));
+                Assert.IsNull(filenameTxtFromDB);
                 Assert.IsNull(fileContentFromDB);
             }
             catch (Exception err)
@@ -257,13 +281,17 @@ namespace MaksGovor.DatabaseInteraction.Test
         {
             try
             {
-                string textFromFile = BaseFileWorker.ReadAll(filename);
+                string textFromFile = BaseFileWorker.ReadAll(filenameTxt);
                 byte[] fileContent = Encoding.ASCII.GetBytes(textFromFile);
-                
-                Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
-                Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
-                Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
-                Assert.IsNotNull(storageDatabase.GetFiles(filename));
+                const int countFiles = 3;
+
+                for (int i = 0; i < countFiles; i++) {
+                    Assert.IsTrue(storageDatabase.AddFile(filenameTxt, fileContent));
+                }
+
+                DataTable files = storageDatabase.GetFiles(filenameTxt);
+                Assert.IsNotNull(files);
+                Assert.AreEqual(files.Rows.Count, countFiles);
             }
             catch (Exception err)
             {
