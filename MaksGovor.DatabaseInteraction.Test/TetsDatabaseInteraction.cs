@@ -208,12 +208,16 @@ namespace MaksGovor.DatabaseInteraction.Test
                 string filenameTxtFromDB;
                 byte[] fileContentFromDB;
 
-                Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
+                Assert.IsTrue(storageDatabase.AddFile(filename, fileContent), 
+                    $"The file {filename} was not added successfully");
                 int? fileID = storageDatabase.GetIntBySql("SELECT MAX(FileID) FROM Files");
-                Assert.IsTrue(storageDatabase.GetFile((int)fileID, out filenameTxtFromDB, out fileContentFromDB));
+                Assert.IsTrue(storageDatabase.GetFile((int)fileID, out filenameTxtFromDB, out fileContentFromDB), 
+                    $"File {filename} not found in db, although add method returned true");
                 string textFromDB = Encoding.ASCII.GetString(fileContentFromDB);
-                Assert.AreEqual(filename, filenameTxtFromDB);
-                Assert.AreEqual(textFromFile, textFromDB);
+                Assert.AreEqual(filename, filenameTxtFromDB,
+                    "The names of the files returned by the method and the database do not match");
+                Assert.AreEqual(textFromFile, textFromDB,
+                    "The content of the files returned by the method and the database do not match");
             }
             catch (Exception err)
             {
@@ -236,12 +240,16 @@ namespace MaksGovor.DatabaseInteraction.Test
                 string filenameTxtFromDB;
                 byte[] fileContentFromDB;
 
-                Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
+                Assert.IsTrue(storageDatabase.AddFile(filename, fileContent),
+                    $"The file {filename} was not added successfully");
                 int? fileID = storageDatabase.GetIntBySql("SELECT MAX(FileID) FROM Files");
-                Assert.IsTrue(storageDatabase.GetFile((int)fileID, out filenameTxtFromDB, out fileContentFromDB));
+                Assert.IsTrue(storageDatabase.GetFile((int)fileID, out filenameTxtFromDB, out fileContentFromDB),
+                    $"File {filename} not found in db, although add method returned true");
                 string textFromDB = Encoding.ASCII.GetString(fileContentFromDB);
-                Assert.AreEqual(filename, filenameTxtFromDB);
-                Assert.AreEqual(textFromFile, textFromDB);
+                Assert.AreEqual(filename, filenameTxtFromDB,
+                    "The names of the files returned by the method and the database do not match");
+                Assert.AreEqual(textFromFile, textFromDB,
+                    "The content of the files returned by the method and the database do not match");
             }
             catch (Exception err)
             {
@@ -262,13 +270,18 @@ namespace MaksGovor.DatabaseInteraction.Test
                 string filenameTxtFromDB = null;
                 byte[] fileContentFromDB = null;
 
-                Assert.IsTrue(storageDatabase.AddFile(filename, fileContent));
+                Assert.IsTrue(storageDatabase.AddFile(filename, fileContent),
+                    $"The file {filename} was not added successfully");
                 int? fileID = storageDatabase.GetIntBySql("SELECT MAX(FileID) FROM Files");
-                Assert.IsTrue(storageDatabase.DeleteFile((int)fileID));
+                Assert.IsTrue(storageDatabase.DeleteFile((int)fileID),
+                    $"Deleting a file by ID = {fileID} is not successful");
 
-                Assert.IsFalse(storageDatabase.GetFile((int)fileID, out filenameTxtFromDB, out fileContentFromDB));
-                Assert.IsNull(filenameTxtFromDB);
-                Assert.IsNull(fileContentFromDB);
+                Assert.IsFalse(storageDatabase.GetFile((int)fileID, out filenameTxtFromDB, out fileContentFromDB),
+                    $"Even though the file by ID = {fileID} was deleted from the database, the method tells us that it is there.");
+                Assert.IsNull(filenameTxtFromDB, 
+                    $"Even though the file by ID = {fileID} was deleted from the database, the method returns some value of its name");
+                Assert.IsNull(fileContentFromDB,
+                    $"Although the file by ID = {fileID} is deleted from the database, the method returns some value of its content");
             }
             catch (Exception err)
             {
@@ -286,12 +299,15 @@ namespace MaksGovor.DatabaseInteraction.Test
                 const int countFiles = 3;
 
                 for (int i = 0; i < countFiles; i++) {
-                    Assert.IsTrue(storageDatabase.AddFile(filenameTxt, fileContent));
+                    Assert.IsTrue(storageDatabase.AddFile(filenameTxt, fileContent),
+                        $"The file filenameTxt was not added successfully for the {i + 1} time");
                 }
 
                 DataTable files = storageDatabase.GetFiles(filenameTxt);
-                Assert.IsNotNull(files);
-                Assert.AreEqual(files.Rows.Count, countFiles);
+                Assert.IsNotNull(files,
+                    "GetFiles returns zero values even when there are files with the same name in the database");
+                Assert.AreEqual(files.Rows.Count, countFiles,
+                    "The number of records for a certain file name is not returned correctly");
             }
             catch (Exception err)
             {
