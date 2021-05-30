@@ -196,6 +196,24 @@ namespace MaksGovor.DatabaseInteraction.Test
             }
         }
 
+        [TestMethod]
+        public void Test_ReadAll_GetFile_from_DB_ThrowsExeptions()
+        {
+            try
+            {
+                int? fileID = storageDatabase.GetIntBySql("SELECT MAX(FileID) FROM Files");
+                string nullName = null;
+                byte[] nullContent = null;
+                Assert.ThrowsException<InvalidOperationException>(() => storageDatabase.GetFile((int)fileID, out nullName, out byte[] fileContent));
+                Assert.ThrowsException<InvalidOperationException>(() => storageDatabase.GetFile((int)fileID, out string name, out nullContent));
+                Assert.ThrowsException<InvalidOperationException>(() => storageDatabase.GetFile((int)fileID, out nullName, out nullContent));
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
         [DataTestMethod]
         [DataRow(filenameTxt)]
         [DataRow(filenameJson)]
@@ -298,8 +316,8 @@ namespace MaksGovor.DatabaseInteraction.Test
             {
                 string textFromFile = BaseFileWorker.ReadAll(filename);
                 byte[] fileContent = Encoding.ASCII.GetBytes(textFromFile);
-                string filenameTxtFromDB = null;
-                byte[] fileContentFromDB = null;
+                string filenameTxtFromDB;
+                byte[] fileContentFromDB;
 
                 Assert.IsTrue(storageDatabase.AddFile(filename, fileContent),
                     $"The file {filename} was not added successfully");
