@@ -167,6 +167,7 @@ namespace MaksGovor.DatabaseInteraction.Test
         private const string filenameTxt = "filetest.txt";
         private const string filenameEmpty = "filetest_empty.txt";
         private const string filenameNull = "filetest_null.txt";
+        private const string filenameUnicode = "filetest_👽.txt";
         private const string filenameJson = "filetest.json";
         private const string filenameXml = "filetest.xml";
 
@@ -181,9 +182,11 @@ namespace MaksGovor.DatabaseInteraction.Test
                 const string txt = "some text\n\rsome text";
                 const string json = "{ \"field\": \"value\" }";
                 const string xml = "<xsl:strip-space elements=\" * \"/>";
+                const string UTF8Str = "👽👽👽 网络 👽👽👽";
                 BaseFileWorker.Write(txt, filenameTxt);
                 BaseFileWorker.Write("", filenameEmpty);
                 BaseFileWorker.Write(null, filenameNull);
+                BaseFileWorker.Write(UTF8Str, filenameUnicode);
                 BaseFileWorker.Write(json, filenameJson);
                 BaseFileWorker.Write(xml, filenameXml);
             }
@@ -257,6 +260,34 @@ namespace MaksGovor.DatabaseInteraction.Test
             }
         }
 
+
+        [TestMethod]
+        public void Test_ReadLines_Push_in_DB_Unicode_Text()
+        {
+            try
+            {
+                string textFromFile = BaseFileWorker.ReadAll(filenameUnicode);
+                byte[] fileContent = Encoding.UTF8.GetBytes(textFromFile);
+                string filenameTxtFromDB;
+                byte[] fileContentFromDB;
+
+                Assert.IsTrue(storageDatabase.AddFile(filenameUnicode, fileContent),
+                    "The file filenameUnicode was not added successfully");
+                int? fileID = storageDatabase.GetIntBySql("SELECT MAX(FileID) FROM Files");
+                Assert.IsTrue(storageDatabase.GetFile((int)fileID, out filenameTxtFromDB, out fileContentFromDB),
+                    "File filenameUnicode not found in db, although add method returned true");
+                string textFromDB = Encoding.UTF8.GetString(fileContentFromDB);
+                Assert.AreEqual(filenameUnicode, filenameTxtFromDB,
+                    "The names of the files returned by the method and the database do not match");
+                Assert.AreEqual(textFromFile, textFromDB,
+                    "The content of the files returned by the method and the database do not match");
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
+
         [DataTestMethod]
         [DataRow(filenameTxt)]
         [DataRow(filenameEmpty)]
@@ -298,7 +329,8 @@ namespace MaksGovor.DatabaseInteraction.Test
                 byte[] fileContent = Encoding.ASCII.GetBytes(textFromFile);
                 const int countFiles = 3;
 
-                for (int i = 0; i < countFiles; i++) {
+                for (int i = 0; i < countFiles; i++)
+                {
                     Assert.IsTrue(storageDatabase.AddFile(filenameTxt, fileContent),
                         $"The file filenameTxt was not added successfully for the {i + 1} time");
                 }
