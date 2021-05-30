@@ -166,10 +166,10 @@ namespace MaksGovor.DatabaseInteraction.Test
         private StorageDatabaseUtils storageDatabase;
         private const string filenameTxt = "filetest.txt";
         private const string filenameEmpty = "filetest_empty.txt";
-        private const string filenameNull = "filetest_null.txt";
         private const string filenameUnicode = "filetest_👽.txt";
         private const string filenameJson = "filetest.json";
         private const string filenameXml = "filetest.xml";
+        private const string nonExistFilename= "hack.js";
 
         [TestInitialize]
         public void Initialization()
@@ -185,7 +185,6 @@ namespace MaksGovor.DatabaseInteraction.Test
                 const string UTF8Str = "👽👽👽 网络 👽👽👽";
                 BaseFileWorker.Write(txt, filenameTxt);
                 BaseFileWorker.Write("", filenameEmpty);
-                BaseFileWorker.Write(null, filenameNull);
                 BaseFileWorker.Write(UTF8Str, filenameUnicode);
                 BaseFileWorker.Write(json, filenameJson);
                 BaseFileWorker.Write(xml, filenameXml);
@@ -196,17 +195,19 @@ namespace MaksGovor.DatabaseInteraction.Test
             }
         }
 
-        [TestMethod]
-        public void Test_ReadAll_GetFile_from_DB_ThrowsExeptions()
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        public void Test_NonValidFileName_NotAdded_toDB(string filename)
         {
             try
             {
+                byte[] fileContent = Encoding.ASCII.GetBytes("Not be added");
+
+                Assert.IsFalse(storageDatabase.AddFile(filename, fileContent),
+                    "Must not add a file with an empty or null name");
                 int? fileID = storageDatabase.GetIntBySql("SELECT MAX(FileID) FROM Files");
-                string nullName = null;
-                byte[] nullContent = null;
-                Assert.ThrowsException<InvalidOperationException>(() => storageDatabase.GetFile((int)fileID, out nullName, out byte[] fileContent));
-                Assert.ThrowsException<InvalidOperationException>(() => storageDatabase.GetFile((int)fileID, out string name, out nullContent));
-                Assert.ThrowsException<InvalidOperationException>(() => storageDatabase.GetFile((int)fileID, out nullName, out nullContent));
+                Assert.AreEqual(fileID, null);
             }
             catch (Exception err)
             {
@@ -219,7 +220,6 @@ namespace MaksGovor.DatabaseInteraction.Test
         [DataRow(filenameJson)]
         [DataRow(filenameXml)]
         [DataRow(filenameEmpty)]
-        [DataRow(filenameNull)]
         public void Test_ReadAll_Push_in_DB(string filename)
         {
             try
@@ -251,7 +251,6 @@ namespace MaksGovor.DatabaseInteraction.Test
         [DataRow(filenameJson)]
         [DataRow(filenameXml)]
         [DataRow(filenameEmpty)]
-        [DataRow(filenameNull)]
         public void Test_ReadLines_Push_in_DB(string filename)
         {
             try
@@ -278,6 +277,24 @@ namespace MaksGovor.DatabaseInteraction.Test
             }
         }
 
+        [TestMethod]
+        public void Test_ReadAll_Push_in_DB_NotExistFile()
+        {
+            try
+            {
+                string textFromFile = BaseFileWorker.ReadAll(nonExistFilename);
+
+                Assert.IsNull(textFromFile, "Unable to read text from a non-existent file");
+                Assert.IsFalse(storageDatabase.AddFile(nonExistFilename, null),
+                    "A file that does not exist should not be written");
+                int? fileID = storageDatabase.GetIntBySql("SELECT MAX(FileID) FROM Files");
+                Assert.AreEqual(fileID, null);
+            }
+            catch (Exception err)
+            {
+                Assert.Fail(err.Message);
+            }
+        }
 
         [TestMethod]
         public void Test_ReadLines_Push_in_DB_Unicode_Text()
@@ -309,7 +326,6 @@ namespace MaksGovor.DatabaseInteraction.Test
         [DataTestMethod]
         [DataRow(filenameTxt)]
         [DataRow(filenameEmpty)]
-        [DataRow(filenameNull)]
         public void Test_ReadAll_and_Deleting_from_DB(string filename)
         {
             try
